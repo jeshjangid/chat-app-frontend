@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import assets from '../assets/assets.js'
 import { formatMessageTime } from '../lib/utils.js';
-import { ChatContext } from '../context/ChatContext';
+import { ChatContext } from '../context/chatContext.jsx';
 import { AuthContext } from '../context/authContext';
 import toast from 'react-hot-toast';
 
