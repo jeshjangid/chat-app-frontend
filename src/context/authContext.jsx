@@ -19,7 +19,6 @@ axios.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true;
-
       try {
         await axios.post('/api/auth/refresh');
         return await axios(originalRequest);
