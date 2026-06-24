@@ -87,6 +87,7 @@ export const AuthProvider = ({ children }) => {
       if (data.success || data.message) {
         await checkAuthUser();
         toast.success(data.message || 'Logged in successfully')
+         navigate("/");
       } else {
         toast.error(data.message || 'Login failed')
       }
