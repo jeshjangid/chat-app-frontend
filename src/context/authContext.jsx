@@ -17,16 +17,28 @@ axios.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest?._retry) {
+    // 1. Identify if the failing request is an authentication endpoint
+    const isAuthRoute = originalRequest.url.includes('/api/auth/refresh') || 
+                        originalRequest.url.includes('/api/auth/login') ||
+                        originalRequest.url.includes('/api/auth/signup') ||
+                        originalRequest.url.includes('/api/auth/logout');
+
+    // 2. Only attempt refresh if it's a 401, hasn't been retried yet, AND is NOT an auth route
+    if (error.response?.status === 401 && !originalRequest?._retry && !isAuthRoute) {
       originalRequest._retry = true;
+
       try {
+        // This uses the base axios instance to request a new token pair
         await axios.post('/api/auth/refresh');
         return await axios(originalRequest);
       } catch (refreshError) {
+        // If the refresh call itself fails, reject the promise chain
         return Promise.reject(refreshError);
       }
     }
 
+    // 3. Optional: If the refresh call itself explicitly fails with a 401, 
+    // you can handle cleaning up global UI state or redirecting to /login here if needed.
     return Promise.reject(error);
   }
 );
