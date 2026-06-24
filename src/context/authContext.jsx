@@ -5,12 +5,7 @@ import { io } from 'socket.io-client'
 
 export const AuthContext = createContext();
 
-const rawBackendUrl = import.meta.env.VITE_BACKEND_URL;
-const backendUrl = rawBackendUrl
-  ? rawBackendUrl.startsWith('http://') || rawBackendUrl.startsWith('https://')
-    ? rawBackendUrl
-    : `https://${rawBackendUrl}`
-  : 'http://localhost:5000';
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const isDev = import.meta.env.DEV;
 const socketUrl = isDev ? window.location.origin : backendUrl;
 

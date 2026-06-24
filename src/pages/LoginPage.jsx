@@ -36,41 +36,50 @@ const LoginPage = () => {
             : loginSchema
 
     const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: zodResolver(currentSchema),
-        defaultValues: {
-            fullName: '',
-            email: '',
-            password: '',
-            bio: '',
-            agree: false,
-        },
-    })
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+} = useForm({
+    shouldUnregister: false,
+    resolver: zodResolver(currentSchema),
+    defaultValues: {
+        fullName: '',
+        email: '',
+        password: '',
+        bio: '',
+        agree: false,
+    },
+})
 
-    const onSubmitHandler = (data) => {
-        if (currentState === 'Sign up' && !isDataSubmitted) {
-            setIsDataSubmitted(true)
-            return
-        }
+   const onSubmitHandler = (data) => {
 
-        login(
-            currentState === 'Sign up' ? 'signup' : 'login',
-            currentState === 'Sign up'
-                ? {
-                    fullName: data.fullName,
-                    email: data.email,
-                    password: data.password,
-                    bio: data.bio,
-                }
-                : {
-                    email: data.email,
-                    password: data.password,
-                }
-        )
+    if (currentState === 'Sign up' && !isDataSubmitted) {
+        setIsDataSubmitted(true)
+        return
     }
+
+    if (currentState === 'Sign up') {
+
+        const formData = getValues()
+
+        console.log('Signup Data:', formData)
+
+        login('signup', {
+            fullName: formData.fullName,
+            email: formData.email,
+            password: formData.password,
+            bio: formData.bio,
+        })
+
+        return
+    }
+
+    login('login', {
+        email: data.email,
+        password: data.password,
+    })
+}
 
     return (
         <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
