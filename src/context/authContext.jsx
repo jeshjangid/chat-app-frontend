@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client'
 
 export const AuthContext = createContext();
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null)
   const [onlineUsers, setOnlineUsers] = useState([])
   const [socket, setSocket] = useState(null)
+  const navigate = useNavigate()
 
   const connectSocket = (userData) => {
     if (!userData || socket?.connected) return;
