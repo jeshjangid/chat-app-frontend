@@ -10,7 +10,7 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const isDev = import.meta.env.DEV;
 const socketUrl = isDev ? window.location.origin : backendUrl;
 
-axios.defaults.baseURL = isDev ? '' : backendUrl;
+axios.defaults.baseURL = isDev ? 'http://localhost:5000' : backendUrl;
 axios.defaults.withCredentials = true;
 
 axios.interceptors.response.use(
@@ -70,7 +70,10 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthUser = async () => {
     try {
-      const { data } = await axios.get('/api/auth/check')
+      // const { data } = await axios.get('/api/auth/check')
+      const { data } = await axios.get("/api/auth/check", {
+  withCredentials: true,
+});
       if (data.success && data.user) {
         setAuthUser(data.user)
         connectSocket(data.user)
